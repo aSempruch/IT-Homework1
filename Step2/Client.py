@@ -6,30 +6,44 @@ import random
 import socket as mysoc
 
 def client():
-    try:
-        cs=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
-        print("[C]: Client socket created")
-    except mysoc.error as err:
-        print('{} \n'.format("socket open error ",err))
         
   
 # Define the port on which you want to connect to the server
-    port = 50007                
+    port = 50010              
     sa_sameas_myaddr =mysoc.gethostbyname(mysoc.gethostname())
-# connect to the server on local machine
-    server_binding=(sa_sameas_myaddr,port)
-    cs.connect(server_binding)
+    
 
-	# Send Message to server
-    msg = "TestingSFTPv3"
-    print("('[C]: Sending '%s' to server)" % msg)
-    cs.send(msg.encode('utf-8'))
-    data_from_server=cs.recv(100)
-#receive data from the server 
-  
-    print("[C]: Data received from server::  ",data_from_server.decode('utf-8'))
+    # Open file containing messages
+    file = open('./messages.txt')
+    line = file.readline()
+    outputFile = open('./output.txt', 'w')
+    while line:
+        try:
+            cs=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+            print("[C]: Client socket created")
+        except mysoc.error as err:
+            print('{} \n'.format("socket open error ",err))
+        # connect to the server on local machine
+        server_binding=(sa_sameas_myaddr,port)
+        cs.connect(server_binding)
+        # Send Message to server
+        msg = line.strip()
+        print("('[C]: Sending '%s' to server)" % msg)
+        cs.send(msg.encode('utf-8'))
+        data_from_server=cs.recv(100)
+        
+        #receive data from the server 
+        response = data_from_server.decode('utf-8')
+
+        print("[C]: Data received from server::  ",response)
+        outputFile.write(response + '\n')
+
+        line = file.readline()
+        cs.close()
+        time.sleep(0.5)
+
 # close the cclient socket 
-    cs.close()
+    
     exit()   
 
 t2 = threading.Thread(name='client', target=client)
