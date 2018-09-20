@@ -1,10 +1,4 @@
-hello
-world
-these
-are
-random
-words
-that
-also
-contain spaces
-ok done now
+this is a new
+text pattern
+with a new sound to
+it

@@ -2,7 +2,6 @@ import numpy as mypy
 import threading
 import time
 import random
-
 import socket as mysoc
 
 

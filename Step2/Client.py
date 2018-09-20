@@ -14,9 +14,9 @@ def client():
     
 
     # Open file containing messages
-    file = open('./messages.txt')
+    file = open('./HW1test.txt')
     line = file.readline()
-    outputFile = open('./output.txt', 'w')
+    outputFile = open('./HW1out.txt', 'w')
     while line:
         try:
             cs=mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
@@ -39,11 +39,13 @@ def client():
         outputFile.write(response + '\n')
 
         line = file.readline()
+
+        # close the cclient socket 
         cs.close()
         time.sleep(0.5)
-
-# close the cclient socket 
     
+    file.close()
+    outputFile.close()
     exit()   
 
 t2 = threading.Thread(name='client', target=client)
